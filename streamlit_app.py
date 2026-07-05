@@ -489,7 +489,7 @@ def render_result_page():
     st.markdown('<div class="download-container">', unsafe_allow_html=True)
     if not result_sheet1.empty or not result_sheet2.empty:
         combined_df = pd.concat([result_sheet1, result_sheet2]).drop_duplicates()
-        csv_data = combined_df.to_csv(index=False, encoding='gbk').encode('gbk')
+        csv_data = combined_df.to_csv(index=False, encoding='utf-8').encode('utf-8')
 
         if st.download_button(
                 label="💾 Download CSV",
