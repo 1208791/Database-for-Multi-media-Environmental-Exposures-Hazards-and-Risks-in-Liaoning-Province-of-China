@@ -383,25 +383,22 @@ def render_home_page():
 
 
     # 👇 页脚
-    col11_1, col11_2, col11_3 = st.columns([1, 5, 6], vertical_alignment="center")
+    col11_1,col11_2, col11_3 = st.columns([1, 12,1], vertical_alignment="center")
     with col11_1:
-        try:
-            st.image("1.png", width=120)
-        except:
-            st.markdown(
-                '<div style="width:120px;height:120px;background:linear-gradient(135deg,#1f77b4,#155a8a);border-radius:16px;display:flex;align-items:center;justify-content:center;color:white;font-size:48px">🏛️</div>',
-                unsafe_allow_html=True)
+        st.markdown('', unsafe_allow_html=True)
     with col11_2:
-        st.markdown('<span class="footer-text">Dalian University of Technology</span>', unsafe_allow_html=True)
-    with col11_3:
         # Simple help button without dropdown
         if st.button("Help", key="help_btn", use_container_width=True):
             st.markdown("""
-                Enter a CAS Number and click "Search"
+                Enter a CAS number and click "Search". <br>
+                Click Download CSV to download the available exposure, SSDs data, and ecological risk information in Liaoning Province for the selected chemical.<br>
+                Notes: The concentration represents the mean concentration collected from the published literature.
             """, unsafe_allow_html=True)
 
             # Add a close button
             st.button("Close", key="close_help", use_container_width=True)
+    with col11_3:
+        st.markdown('', unsafe_allow_html=True)
 
     # 🔎 搜索逻辑
     if search_btn:
@@ -462,7 +459,7 @@ def render_result_page():
                 unsafe_allow_html=True)
     if len(result_sheet2) > 0:
         display_cols = ['Chemical name', 'CAS', 'Mean of log toxicity value', 'Standard deviation', 'HC5 (ng/L)',
-                        'Environmental medium']
+                        'Environmental medium','Lower estimate of HC5 (ng/L)','Upper estimate of HC5 (ng/L)']
         valid_cols = [col for col in display_cols if col in result_sheet2.columns]
         if valid_cols:
             st.dataframe(result_sheet2[valid_cols].drop_duplicates(), use_container_width=True, hide_index=True)
@@ -489,7 +486,7 @@ def render_result_page():
     st.markdown('<div class="download-container">', unsafe_allow_html=True)
     if not result_sheet1.empty or not result_sheet2.empty:
         combined_df = pd.concat([result_sheet1, result_sheet2]).drop_duplicates()
-        csv_data = combined_df.to_csv(index=False, encoding='utf-8').encode('utf-8')
+        csv_data = combined_df.to_csv(index=False, encoding='gbk').encode('gbk')
 
         if st.download_button(
                 label="💾 Download CSV",
